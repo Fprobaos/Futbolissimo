@@ -1,7 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { Text, View, TextInput, Button, FlatList, TouchableOpacity, Modal } from 'react-native';
-import { styles } from './style'; 
+import { Text, View, Button, FlatList, TouchableOpacity, Modal } from 'react-native';
 import { useState } from 'react';
+import Input from './Components/Input';
+
+
+import { styles } from './style'; 
 
 export default function App() {
 
@@ -10,14 +13,7 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
   const [selectedEvent, setSelectedEvent] = useState(null)
 
-  const onAddList = () => {
-    if(text.length > 0)
-    return(
-      setEvents( [ ...events, {id: Math.random().toString(), value: text}]),
-      setText('')
-
-    )
-  }  
+  
 
   const onHandlerEvent = (id) => {
     setModalVisible(true);
@@ -37,23 +33,32 @@ export default function App() {
     setSelectedEvent(null)
   }
 
-  const onHandleDeleteEvent = (id) => {
+  const onHandleDeleteEvent = (id) => { 
     setModalVisible(!modalVisible)
     setEvents(events.filter(event => event.id !== id))
 
   }
 
+  const onAddList = () => {
+    if(text.length > 0) 
+      setEvents([...events, {id: Math.random().toString(), value: text}]);
+
+      setText('')
+    
+     
+    }
+    
   return (
-    <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder='Enter your email' 
-          style={styles.input} 
-          value={text} 
-          onChangeText={(text) => setText(text)}/>
-        <Button title='Add' color={'#6761A8'} onPress={onAddList}/>
-        <Text />
-      </View>
+      <View style={styles.container}>
+      <Input
+        buttonColor='#52528C'
+        buttonTitle='Add'
+        placeholder='Enter your email'
+        value={text}
+        onChangeText={(text) => setText(text)}
+        onAddList={onAddList}
+
+      />
       <View style={styles.listContainer}>
         <FlatList renderItem={renderItem} data={events} keyExtractor={(item) => item.id}/>          
       </View>
